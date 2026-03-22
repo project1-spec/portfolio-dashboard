@@ -192,9 +192,9 @@ export default function Portfolio() {
           </p>
 
           {[
-            { n: 1, text: <>Go to <span style={{ color: "#60a5fa" }}>console.cloud.google.com</span> â Create a new project (or select existing)</> },
-            { n: 2, text: <>APIs &amp; Services â Enable APIs â search <span style={{ color: "#60a5fa" }}>Google Sheets API</span> â Enable</> },
-            { n: 3, text: <>APIs &amp; Services â Credentials â Create Credentials â <span style={{ color: "#60a5fa" }}>OAuth Client ID</span></> },
+            { n: 1, text: <>Go to <span style={{ color: "#60a5fa" }}>console.cloud.google.com</span> {"\u2192"} Create a new project (or select existing)</> },
+            { n: 2, text: <>APIs &amp; Services {"\u2192"} Enable APIs {"\u2192"} search <span style={{ color: "#60a5fa" }}>Google Sheets API</span> {"\u2192"} Enable</> },
+            { n: 3, text: <>APIs &amp; Services {"\u2192"} Credentials {"\u2192"} Create Credentials {"\u2192"} <span style={{ color: "#60a5fa" }}>OAuth Client ID</span></> },
             { n: 4, text: <>Application type: <span style={{ color: "#60a5fa" }}>Web application</span>. Under Authorised JavaScript origins add <span style={{ color: "#60a5fa" }}>{window.location.origin}</span></> },
             { n: 5, text: <>Copy the <span style={{ color: "#60a5fa" }}>Client ID</span> and paste it below</> },
           ].map(({ n, text }) => (
@@ -218,7 +218,7 @@ export default function Portfolio() {
 
           <button onClick={() => { if (!clientId.trim()) { setError("Please enter your Client ID."); return; } setError(""); sessionStorage.setItem("portfolio_clientId", clientId.trim()); setScreen(SCREEN.AUTH); }}
             style={S.btn()}>
-            Continue â
+            Continue {"\u2192"}
           </button>
         </div>
       </div>
@@ -242,7 +242,7 @@ export default function Portfolio() {
 
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
             <button onClick={() => setScreen(SCREEN.SETUP)} style={S.ghost}>â Back</button>
-            <button onClick={signIn} style={S.btn()}>Sign in with Google â</button>
+            <button onClick={signIn} style={S.btn()}>Sign in with Google {"\u2192"}</button>
           </div>
         </div>
       </div>
@@ -281,7 +281,7 @@ export default function Portfolio() {
           <div style={{ display: "flex", gap: 12 }}>
             <button onClick={() => setScreen(SCREEN.AUTH)} style={S.ghost}>â Back</button>
             <button onClick={() => { if (sheetUrl) sessionStorage.setItem("portfolio_sheetUrl", sheetUrl); loadSheet(); }} disabled={!sheetUrl || loading} style={{ ...S.btn(), opacity: !sheetUrl ? 0.4 : 1 }}>
-              {loading ? "Loading..." : "Load Dashboard â"}
+              {loading ? "Loading..." : "Load Dashboard \u2192"}
             </button>
           </div>
         </div>
@@ -299,7 +299,7 @@ export default function Portfolio() {
         <div>
           <div style={{ ...S.label, marginBottom: 8 }}>Live Portfolio â {fmt(total)} Investable</div>
           <h1 style={{ fontSize: 28, fontWeight: 400, margin: 0, color: "#f8fafc", letterSpacing: "-0.02em" }}>
-            Current <span style={{ color: "#334155" }}>â</span> Target Allocation
+            Current <span style={{ color: "#334155" }}>{"\u2192"}</span> Target Allocation
           </h1>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
@@ -379,8 +379,8 @@ export default function Portfolio() {
       {/* Summary Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
         {[
-          { label: "Largest Reduction", get: () => { const c = changes.filter(r => r.to - r.from < -0.05).sort((a,b) => (a.to-a.from)-(b.to-b.from))[0]; return c ? [`â${fmt(Math.abs(c.toVal-c.fromVal))}`, `${c.name}: ${fmtPct(c.from)} â ${fmtPct(c.to)}`, "#f87171"] : ["â","","#f87171"]; }},
-          { label: "Largest Increase", get: () => { const c = changes.filter(r => r.to - r.from > 0.05).sort((a,b) => (b.to-b.from)-(a.to-a.from))[0]; return c ? [`+${fmt(c.toVal-c.fromVal)}`, `${c.name}: ${fmtPct(c.from)} â ${fmtPct(c.to)}`, "#34d399"] : ["â","","#34d399"]; }},
+          { label: "Largest Reduction", get: () => { const c = changes.filter(r => r.to - r.from < -0.05).sort((a,b) => (a.to-a.from)-(b.to-b.from))[0]; return c ? [`â${fmt(Math.abs(c.toVal-c.fromVal))}`, `${c.name}: ${fmtPct(c.from)} \u2192 ${fmtPct(c.to)}`, "#f87171"] : ["â","","#f87171"]; }},
+          { label: "Largest Increase", get: () => { const c = changes.filter(r => r.to - r.from > 0.05).sort((a,b) => (b.to-b.from)-(a.to-a.from))[0]; return c ? [`+${fmt(c.toVal-c.fromVal)}`, `${c.name}: ${fmtPct(c.from)} \u2192 ${fmtPct(c.to)}`, "#34d399"] : ["â","","#34d399"]; }},
           { label: "Total Investable", get: () => [fmt(total), "Excl. primary residence", "#60a5fa"] },
         ].map(({ label, get }) => {
           const [value, note, color] = get();
