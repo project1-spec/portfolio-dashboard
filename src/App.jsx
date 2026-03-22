@@ -29,7 +29,7 @@ const categorise = (label) => {
   return null;
 };
 
-const fmt = (v) => "Â£" + Math.round(v).toLocaleString("en-GB");
+const fmt = (v) => "\u00A3" + Math.round(v).toLocaleString("en-GB");
 const fmtPct = (v) => v.toFixed(1) + "%";
 
 const processRows = (rows) => {
@@ -44,7 +44,7 @@ const processRows = (rows) => {
 
     let value = null;
     for (let i = 1; i < row.length; i++) {
-      const cleaned = (row[i] || "").toString().replace(/[Â£,\s]/g, "");
+      const cleaned = (row[i] || "").toString().replace(/[\u00A3,\s]/g, "");
       const n = parseFloat(cleaned);
       if (!isNaN(n) && n > 0) { value = n; break; }
     }
@@ -165,7 +165,7 @@ export default function Portfolio() {
         `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/A:Z`,
         { headers: { Authorization: "Bearer " + token } }
       );
-      if (res.status === 401) { setError("Session expired â please sign in again."); setScreen(SCREEN.AUTH); setLoading(false); return; }
+      if (res.status === 401) { setError("Session expired \u2014 please sign in again."); setScreen(SCREEN.AUTH); setLoading(false); return; }
       if (!res.ok) throw new Error(`API error ${res.status}`);
       const json = await res.json();
       const rows = json.values || [];
@@ -188,7 +188,7 @@ export default function Portfolio() {
             Connect Google Sheets securely
           </h1>
           <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.7, marginBottom: 28 }}>
-            You'll need a Google Cloud OAuth Client ID. This takes about 5 minutes and means your sheet stays completely private â only you can access it.
+            You'll need a Google Cloud OAuth Client ID. This takes about 5 minutes and means your sheet stays completely private \u2014 only you can access it.
           </p>
 
           {[
@@ -241,7 +241,7 @@ export default function Portfolio() {
           {error && <div style={{ ...S.err, textAlign: "left" }}>{error}</div>}
 
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-            <button onClick={() => setScreen(SCREEN.SETUP)} style={S.ghost}>â Back</button>
+            <button onClick={() => setScreen(SCREEN.SETUP)} style={S.ghost}>{"\u2190"} Back</button>
             <button onClick={signIn} style={S.btn()}>Sign in with Google {"\u2192"}</button>
           </div>
         </div>
@@ -256,7 +256,7 @@ export default function Portfolio() {
         <div style={{ maxWidth: 500, width: "100%" }}>
           {userEmail && (
             <div style={{ fontSize: 11, fontFamily: "monospace", color: "#334155", marginBottom: 20 }}>
-              â Signed in as {userEmail}
+              {"\u25CF"} Signed in as {userEmail}
             </div>
           )}
           <div style={S.label}>Load your sheet</div>
@@ -279,7 +279,7 @@ export default function Portfolio() {
           {error && <div style={S.err}>{error}</div>}
 
           <div style={{ display: "flex", gap: 12 }}>
-            <button onClick={() => setScreen(SCREEN.AUTH)} style={S.ghost}>â Back</button>
+            <button onClick={() => setScreen(SCREEN.AUTH)} style={S.ghost}>{"\u2190"} Back</button>
             <button onClick={() => { if (sheetUrl) sessionStorage.setItem("portfolio_sheetUrl", sheetUrl); loadSheet(); }} disabled={!sheetUrl || loading} style={{ ...S.btn(), opacity: !sheetUrl ? 0.4 : 1 }}>
               {loading ? "Loading..." : "Load Dashboard \u2192"}
             </button>
@@ -297,14 +297,14 @@ export default function Portfolio() {
       {/* Header */}
       <div style={{ marginBottom: 40, display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
         <div>
-          <div style={{ ...S.label, marginBottom: 8 }}>Live Portfolio â {fmt(total)} Investable</div>
+          <div style={{ ...S.label, marginBottom: 8 }}>Live Portfolio {"\u2014"} {fmt(total)} Investable</div>
           <h1 style={{ fontSize: 28, fontWeight: 400, margin: 0, color: "#f8fafc", letterSpacing: "-0.02em" }}>
             Current <span style={{ color: "#334155" }}>{"\u2192"}</span> Target Allocation
           </h1>
         </div>
         <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          {userEmail && <span style={{ fontSize: 11, fontFamily: "monospace", color: "#334155" }}>â {userEmail}</span>}
-          <button onClick={() => { setScreen(SCREEN.SHEET); setData(null); }} style={S.ghost}>âº Refresh</button>
+          {userEmail && <span style={{ fontSize: 11, fontFamily: "monospace", color: "#334155" }}>{"\u25CF"} {userEmail}</span>}
+          <button onClick={() => { setScreen(SCREEN.SHEET); setData(null); }} style={S.ghost}>{"\u21BA"} Refresh</button>
           <button onClick={() => { setScreen(SCREEN.SETUP); setToken(null); setData(null); }} style={S.ghost}>Sign out</button>
         </div>
       </div>
@@ -358,14 +358,17 @@ export default function Portfolio() {
                 <div style={{ width: 8, height: 8, borderRadius: "50%", background: COLORS[row.name] || "#64748b", flexShrink: 0 }} />
                 <span style={{ fontSize: 14, color: "#cbd5e1" }}>{row.name}</span>
               </div>
-              <div style={{ textAlign: "right", fontSize: 13, color: "#64748b", fontFamily: "monospace" }}>{fmtPct(row.from)}</div>
+              <div style={{ textAlign: "right", fontFamily: "monospace" }}>
+                <div style={{ fontSize: 13, color: "#cbd5e1" }}>{fmt(row.fromVal)}</div>
+                <div style={{ fontSize: 11, color: "#475569" }}>{fmtPct(row.from)}</div>
+              </div>
               <div style={{ textAlign: "right", fontSize: 13, color: "#94a3b8", fontFamily: "monospace" }}>{fmtPct(row.to)}</div>
               <div style={{ textAlign: "right", fontSize: 13, fontFamily: "monospace", color: col, fontWeight: 600 }}>
-                {!up && !down ? "â" : (up ? "+" : "") + fmtPct(diff)}
+                {!up && !down ? "\u2014" : (up ? "+" : "") + fmtPct(diff)}
               </div>
               <div style={{ textAlign: "right" }}>
                 <div style={{ fontSize: 11, color: col, fontFamily: "monospace", marginBottom: 4 }}>
-                  {!up && !down ? "â" : (valDiff > 0 ? "+" : "") + fmt(valDiff)}
+                  {!up && !down ? "\u2014" : (valDiff > 0 ? "+" : "") + fmt(valDiff)}
                 </div>
                 <div style={{ height: 3, borderRadius: 2, background: "#1e293b", overflow: "hidden" }}>
                   <div style={{ height: "100%", width: `${Math.min(row.to, 100)}%`, background: COLORS[row.name] || "#64748b", borderRadius: 2 }} />
@@ -379,8 +382,8 @@ export default function Portfolio() {
       {/* Summary Cards */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
         {[
-          { label: "Largest Reduction", get: () => { const c = changes.filter(r => r.to - r.from < -0.05).sort((a,b) => (a.to-a.from)-(b.to-b.from))[0]; return c ? [`â${fmt(Math.abs(c.toVal-c.fromVal))}`, `${c.name}: ${fmtPct(c.from)} \u2192 ${fmtPct(c.to)}`, "#f87171"] : ["â","","#f87171"]; }},
-          { label: "Largest Increase", get: () => { const c = changes.filter(r => r.to - r.from > 0.05).sort((a,b) => (b.to-b.from)-(a.to-a.from))[0]; return c ? [`+${fmt(c.toVal-c.fromVal)}`, `${c.name}: ${fmtPct(c.from)} \u2192 ${fmtPct(c.to)}`, "#34d399"] : ["â","","#34d399"]; }},
+          { label: "Largest Reduction", get: () => { const c = changes.filter(r => r.to - r.from < -0.05).sort((a,b) => (a.to-a.from)-(b.to-b.from))[0]; return c ? [`\u2212${fmt(Math.abs(c.toVal-c.fromVal))}`, `${c.name}: ${fmtPct(c.from)} \u2192 ${fmtPct(c.to)}`, "#f87171"] : ["\u2014","","#f87171"]; }},
+          { label: "Largest Increase", get: () => { const c = changes.filter(r => r.to - r.from > 0.05).sort((a,b) => (b.to-b.from)-(a.to-a.from))[0]; return c ? [`+${fmt(c.toVal-c.fromVal)}`, `${c.name}: ${fmtPct(c.from)} \u2192 ${fmtPct(c.to)}`, "#34d399"] : ["\u2014","","#34d399"]; }},
           { label: "Total Investable", get: () => [fmt(total), "Excl. primary residence", "#60a5fa"] },
         ].map(({ label, get }) => {
           const [value, note, color] = get();
@@ -395,7 +398,7 @@ export default function Portfolio() {
       </div>
 
       <div style={{ marginTop: 24, fontSize: 10, color: "#1e293b", fontFamily: "monospace", textAlign: "center" }}>
-        FOR PERSONAL PLANNING USE ONLY â NOT FINANCIAL ADVICE
+        FOR PERSONAL PLANNING USE ONLY {"\u2014"} NOT FINANCIAL ADVICE
       </div>
     </div>
   );
