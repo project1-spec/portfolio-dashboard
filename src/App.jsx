@@ -188,7 +188,7 @@ export default function Portfolio() {
             Connect Google Sheets securely
           </h1>
           <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.7, marginBottom: 28 }}>
-            You'll need a Google Cloud OAuth Client ID. This takes about 5 minutes and means your sheet stays completely private \u2014 only you can access it.
+            You'll need a Google Cloud OAuth Client ID. This takes about 5 minutes and means your sheet stays completely private {"\u2014"} only you can access it.
           </p>
 
           {[
